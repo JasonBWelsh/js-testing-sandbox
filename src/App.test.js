@@ -1,11 +1,17 @@
-import { add, total } from './App';
+import { total } from './App';
+import { add } from './add';
 
-test('add', () => {
-  const value = add(10, 3);
+jest.mock('./add', () => ({
+  add: jest.fn(() => 25),
+}));
 
-  expect(value).toBe(13);
-});
-
+// integration test
 test('total', () => {
   expect(total(5, 20)).toBe('$25');
+  expect(add).toHaveBeenCalledTimes(1);
+
+  add.mockImplementation(() => 30);
+
+  expect(total(5, 25)).toBe('$30');
+  expect(add).toHaveBeenCalledTimes(2);
 });
